@@ -1,0 +1,27 @@
+.legal-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+}
+
+.legal-layout__header {
+  width: 100%;
+  max-width: 640px;
+  padding: 8px 0 20px;
+}
+
+.legal-layout__brand {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-colour);
+  text-decoration: none;
+}
+
+.legal-layout__content {
+  width: 100%;
+  max-width: 640px;
+  padding: 32px;
+  line-height: 1.6;
+}

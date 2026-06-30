@@ -1,0 +1,45 @@
+.glass-card {
+  background: var(--glass-fill);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.glass-card-small {
+  background: var(--glass-chip-fill);
+  border: 1px solid var(--glass-chip-border);
+  border-radius: var(--radius-md);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.cta-button {
+  background: var(--cta-gradient);
+  border: none;
+  border-radius: var(--radius-md);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--cta-glow) 45%, transparent);
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.cta-button:hover {
+  opacity: 0.92;
+}
+
+.cta-button:active {
+  transform: scale(0.97);
+  opacity: 0.85;
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: color-mix(in srgb, var(--text-colour) 50%, transparent);
+}

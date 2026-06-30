@@ -1,0 +1,79 @@
+:root {
+  /* Backgrounds */
+  --bg-gradient-light: linear-gradient(135deg, #e8f5e9, #e3f2fd, #f3e5f5);
+  --bg-gradient-dark: linear-gradient(135deg, #0d1b2a, #1a2744, #0d2218);
+
+  /* Glass surfaces */
+  --glass-fill-light: rgba(255, 255, 255, 0.18);
+  --glass-border-light: rgba(255, 255, 255, 0.35);
+  --glass-fill-dark: rgba(255, 255, 255, 0.08);
+  --glass-border-dark: rgba(255, 255, 255, 0.15);
+
+  --glass-chip-fill-light: rgba(255, 255, 255, 0.45);
+  --glass-chip-border-light: rgba(255, 255, 255, 0.70);
+  --glass-chip-fill-dark: rgba(255, 255, 255, 0.06);
+  --glass-chip-border-dark: rgba(255, 255, 255, 0.12);
+
+  /* Macro colours */
+  --colour-protein: #60a5fa;
+  --colour-carbs: #fbbf24;
+  --colour-fat: #f87171;
+  --colour-fibre: #4ade80;
+  --colour-sugar: #c084fc;
+  --colour-salt: #94a3b8;
+
+  /* Meal colours */
+  --colour-breakfast: #fbbf24;
+  --colour-lunch: #60a5fa;
+  --colour-dinner: #c084fc;
+  --colour-snacks: #4ade80;
+
+  /* Text */
+  --text-light: #1a2744;
+  --text-dark: #e8f5f0;
+
+  /* Radii */
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
+
+  /* CTA */
+  --cta-gradient: linear-gradient(135deg, #4ade80, #22c55e);
+  --cta-glow: #4ade80;
+
+  /* Gauge colour themes (match iOS GaugeColour enum exactly) */
+  --gauge-forest-main: #4ade80;
+  --gauge-forest-mid: #22c55e;
+  --gauge-forest-light: #86efac;
+
+  --gauge-ocean-main: #60a5fa;
+  --gauge-ocean-mid: #3b82f6;
+  --gauge-ocean-light: #93c5fd;
+
+  --gauge-sunset-main: #fb923c;
+  --gauge-sunset-mid: #f97316;
+  --gauge-sunset-light: #fcd34d;
+
+  --gauge-aurora-main: #c084fc;
+  --gauge-aurora-mid: #a855f7;
+  --gauge-aurora-light: #e9d5ff;
+
+  /* Theme-aware aliases — components should reference these, never the
+     -light/-dark variants directly, so a single [data-theme] toggle
+     repaints the whole app. */
+  --bg-gradient: var(--bg-gradient-light);
+  --glass-fill: var(--glass-fill-light);
+  --glass-border: var(--glass-border-light);
+  --glass-chip-fill: var(--glass-chip-fill-light);
+  --glass-chip-border: var(--glass-chip-border-light);
+  --text-colour: var(--text-light);
+}
+
+[data-theme='dark'] {
+  --bg-gradient: var(--bg-gradient-dark);
+  --glass-fill: var(--glass-fill-dark);
+  --glass-border: var(--glass-border-dark);
+  --glass-chip-fill: var(--glass-chip-fill-dark);
+  --glass-chip-border: var(--glass-chip-border-dark);
+  --text-colour: var(--text-dark);
+}
