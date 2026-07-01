@@ -1,5 +1,16 @@
 import { Link } from 'react-router-dom'
-import { ResponsiveContainer, AreaChart, Area } from 'recharts'
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ReferenceLine,
+} from 'recharts'
 import { useDashboardData } from '../../hooks/useDashboardData'
 import { useInsightsData } from '../../hooks/useInsightsData'
 import { useTheme } from '../../hooks/useTheme.jsx'
@@ -15,10 +26,32 @@ const DATE_FORMAT = new Intl.DateTimeFormat(undefined, {
   month: 'long',
 })
 
+const AVERAGE_MACROS = [
+  { key: 'protein', label: 'Protein', colour: 'protein' },
+  { key: 'carbs', label: 'Carbs', colour: 'carbs' },
+  { key: 'fat', label: 'Fat', colour: 'fat' },
+  { key: 'fibre', label: 'Fibre', colour: 'fibre' },
+]
+
 function greetingForHour(hour) {
   if (hour < 12) return 'Good morning'
   if (hour < 18) return 'Good afternoon'
   return 'Good evening'
+}
+
+function shortDateLabel(dateString) {
+  const [, month, day] = dateString.split('-')
+  return `${parseInt(day, 10)}/${parseInt(month, 10)}`
+}
+
+function tooltipStyle() {
+  return {
+    background: 'var(--glass-chip-fill)',
+    border: '1px solid var(--glass-chip-border)',
+    borderRadius: 'var(--radius-sm)',
+    fontSize: 12,
+    color: 'var(--text-colour)',
+  }
 }
 
 function DashboardSkeleton() {
@@ -42,7 +75,6 @@ function DashboardSkeleton() {
 
           <div className="dashboard__actions">
             <div className="dashboard__skeleton dashboard__skeleton--action" />
-            <div className="dashboard__skeleton dashboard__skeleton--action" />
           </div>
         </div>
 
@@ -55,32 +87,23 @@ function DashboardSkeleton() {
   )
 }
 
-function CalorieTrendWidget({ dailyCalories, lineColour }) {
+function AverageMacrosWidget({ averageMacros }) {
   return (
     <div className="glass-card dashboard__widget">
-      <div className="dashboard__widget-header">
-        <p className="section-label">Last 7 Days</p>
-        <Link to="/insights" className="dashboard__widget-link">
-          See all →
-        </Link>
+      <p className="section-label">Average Macros Per Day</p>
+      <div className="macro-grid dashboard__average-macro-grid">
+        {AVERAGE_MACROS.map(({ key, label, colour }) => (
+          <div key={key} className="macro-grid__cell glass-card-small">
+            <div className="macro-grid__row">
+              <span className="macro-grid__name">{label}</span>
+            </div>
+            <span className="macro-grid__value" style={{ color: `var(--colour-${colour})` }}>
+              {Math.round(averageMacros[key])}
+              <span className="macro-grid__unit">g</span>
+            </span>
+          </div>
+        ))}
       </div>
-      <ResponsiveContainer width="100%" height={64}>
-        <AreaChart data={dailyCalories} margin={{ top: 4, right: 0, left: 0, bottom: 0 }}>
-          <defs>
-            <linearGradient id="dashboard-sparkline-fill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={lineColour} stopOpacity={0.35} />
-              <stop offset="100%" stopColor={lineColour} stopOpacity={0} />
-            </linearGradient>
-          </defs>
-          <Area
-            type="monotone"
-            dataKey="kcal"
-            stroke={lineColour}
-            strokeWidth={2}
-            fill="url(#dashboard-sparkline-fill)"
-          />
-        </AreaChart>
-      </ResponsiveContainer>
     </div>
   )
 }
@@ -88,15 +111,10 @@ function CalorieTrendWidget({ dailyCalories, lineColour }) {
 function TopFoodsWidget({ topFoods }) {
   return (
     <div className="glass-card dashboard__widget">
-      <div className="dashboard__widget-header">
-        <p className="section-label">Most Logged This Week</p>
-        <Link to="/insights" className="dashboard__widget-link">
-          See all →
-        </Link>
-      </div>
+      <p className="section-label">Most Logged This Period</p>
       {topFoods.length > 0 ? (
         <div className="dashboard__top-foods">
-          {topFoods.slice(0, 3).map(({ foodName, count }) => (
+          {topFoods.map(({ foodName, count }) => (
             <div key={foodName} className="dashboard__top-food glass-card-small">
               <span className="dashboard__top-food-name">{foodName}</span>
               <span className="dashboard__top-food-count">×{count}</span>
@@ -104,7 +122,95 @@ function TopFoodsWidget({ topFoods }) {
           ))}
         </div>
       ) : (
-        <p className="dashboard__widget-empty">Nothing logged yet this week.</p>
+        <p className="dashboard__widget-empty">Nothing logged in the last 30 days yet.</p>
+      )}
+    </div>
+  )
+}
+
+function CalorieHistoryCard({ dailyCalories, goal, lineColour }) {
+  return (
+    <div className="glass-card dashboard__insights-card">
+      <p className="section-label">Daily Calories · Last 30 Days</p>
+      <ResponsiveContainer width="100%" height={220}>
+        <AreaChart data={dailyCalories} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
+          <defs>
+            <linearGradient id="dashboard-kcal-fill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={lineColour} stopOpacity={0.35} />
+              <stop offset="100%" stopColor={lineColour} stopOpacity={0} />
+            </linearGradient>
+          </defs>
+          <CartesianGrid stroke="var(--divider)" vertical={false} />
+          <XAxis
+            dataKey="date"
+            tickFormatter={shortDateLabel}
+            tick={{ fontSize: 11, fill: 'var(--text-colour)' }}
+            axisLine={{ stroke: 'var(--divider)' }}
+            tickLine={false}
+            interval={4}
+          />
+          <YAxis
+            tick={{ fontSize: 11, fill: 'var(--text-colour)' }}
+            axisLine={false}
+            tickLine={false}
+            width={40}
+          />
+          <Tooltip contentStyle={tooltipStyle()} labelFormatter={shortDateLabel} />
+          {goal && (
+            <ReferenceLine y={goal} stroke={lineColour} strokeDasharray="4 4" strokeOpacity={0.6} />
+          )}
+          <Area
+            type="monotone"
+            dataKey="kcal"
+            stroke={lineColour}
+            strokeWidth={2.5}
+            fill="url(#dashboard-kcal-fill)"
+          />
+        </AreaChart>
+      </ResponsiveContainer>
+    </div>
+  )
+}
+
+function WeightTrendCard({ weightLogs, lineColour }) {
+  return (
+    <div className="glass-card dashboard__insights-card">
+      <p className="section-label">Weight Trend</p>
+      {weightLogs.length > 0 ? (
+        <ResponsiveContainer width="100%" height={200}>
+          <LineChart data={weightLogs} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
+            <CartesianGrid stroke="var(--divider)" vertical={false} />
+            <XAxis
+              dataKey="loggedDate"
+              tickFormatter={shortDateLabel}
+              tick={{ fontSize: 11, fill: 'var(--text-colour)' }}
+              axisLine={{ stroke: 'var(--divider)' }}
+              tickLine={false}
+            />
+            <YAxis
+              tick={{ fontSize: 11, fill: 'var(--text-colour)' }}
+              axisLine={false}
+              tickLine={false}
+              width={40}
+              domain={['auto', 'auto']}
+            />
+            <Tooltip contentStyle={tooltipStyle()} labelFormatter={shortDateLabel} />
+            <Line
+              type="monotone"
+              dataKey="weightKg"
+              stroke={lineColour}
+              strokeWidth={2.5}
+              dot={{ r: 3, fill: lineColour }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      ) : (
+        <div className="dashboard__insights-empty">
+          <p className="dashboard__insights-empty-title">No weight logged yet</p>
+          <p className="dashboard__widget-empty">
+            Log your weight to start seeing your trend over time.
+          </p>
+        </div>
       )}
     </div>
   )
@@ -112,7 +218,14 @@ function TopFoodsWidget({ topFoods }) {
 
 function DashboardPage() {
   const { profile, logs, loading, error, totals } = useDashboardData()
-  const { dailyCalories, topFoods, loading: insightsLoading } = useInsightsData(7)
+  const {
+    dailyCalories,
+    averageMacros,
+    weightLogs,
+    topFoods,
+    loading: insightsLoading,
+    error: insightsError,
+  } = useInsightsData()
   const { gaugeColour } = useTheme()
   const theme = gaugeThemeName(gaugeColour)
   const lineColour = `var(--gauge-${theme}-main)`
@@ -134,6 +247,9 @@ function DashboardPage() {
 
       {error && (
         <p className="dashboard__error">Couldn't load today's data. {error.message}</p>
+      )}
+      {insightsError && (
+        <p className="dashboard__error">Couldn't load insights. {insightsError.message}</p>
       )}
 
       <div className="dashboard__body">
@@ -161,24 +277,42 @@ function DashboardPage() {
           />
 
           <div className="dashboard__actions">
-            <Link to="/search" className="glass-card-small dashboard__action">
-              Search Food
-            </Link>
-            <Link to="/insights" className="glass-card-small dashboard__action">
-              View Insights
+            <Link to="/diary" className="glass-card-small dashboard__action">
+              View Diary
             </Link>
           </div>
         </div>
 
         <div className="dashboard__right">
-          {!insightsLoading && (
+          {insightsLoading ? (
             <>
-              <CalorieTrendWidget dailyCalories={dailyCalories} lineColour={lineColour} />
+              <div className="glass-card dashboard__skeleton" style={{ height: 140 }} />
+              <div className="glass-card dashboard__skeleton" style={{ height: 180 }} />
+            </>
+          ) : (
+            <>
+              <AverageMacrosWidget averageMacros={averageMacros} />
               <TopFoodsWidget topFoods={topFoods} />
             </>
           )}
         </div>
       </div>
+
+      {insightsLoading ? (
+        <>
+          <div className="glass-card dashboard__skeleton" style={{ height: 220 }} />
+          <div className="glass-card dashboard__skeleton" style={{ height: 220 }} />
+        </>
+      ) : (
+        <>
+          <CalorieHistoryCard
+            dailyCalories={dailyCalories}
+            goal={profile?.dailyCalorieGoal}
+            lineColour={lineColour}
+          />
+          <WeightTrendCard weightLogs={weightLogs} lineColour={lineColour} />
+        </>
+      )}
     </div>
   )
 }

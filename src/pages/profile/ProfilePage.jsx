@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth.jsx'
 import { useTheme } from '../../hooks/useTheme.jsx'
 import { supabase } from '../../lib/supabaseClient'
@@ -338,6 +338,22 @@ function ProfilePage() {
           account, email{' '}
           <a href="mailto:daniel.jacob.95@outlook.com">daniel.jacob.95@outlook.com</a>.
         </p>
+      </div>
+
+      <p className="section-label">Legal</p>
+      <div className="glass-card profile__section">
+        <Link to="/privacy" className="profile-row profile-row--action">
+          <span className="profile-row__icon">📄</span>
+          <span className="profile-row__label">Privacy Policy</span>
+        </Link>
+        <Link to="/terms" className="profile-row profile-row--action">
+          <span className="profile-row__icon">📋</span>
+          <span className="profile-row__label">Terms of Service</span>
+        </Link>
+        <Link to="/support" className="profile-row profile-row--action">
+          <span className="profile-row__icon">💬</span>
+          <span className="profile-row__label">Support</span>
+        </Link>
       </div>
     </div>
   )

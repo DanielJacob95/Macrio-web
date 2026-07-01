@@ -70,25 +70,33 @@
   gap: 12px;
 }
 
-.dashboard__widget-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.dashboard__widget-link {
-  font-size: 12px;
-  font-weight: 600;
-  color: color-mix(in srgb, var(--text-colour) 55%, transparent);
-  text-decoration: none;
-  flex-shrink: 0;
-}
-
 .dashboard__widget-empty {
   margin: 0;
   font-size: 13px;
   color: color-mix(in srgb, var(--text-colour) 55%, transparent);
+}
+
+.dashboard__average-macro-grid {
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.dashboard__insights-card {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dashboard__insights-empty {
+  padding: 24px 8px;
+  text-align: center;
+}
+
+.dashboard__insights-empty-title {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 700;
 }
 
 .dashboard__top-foods {

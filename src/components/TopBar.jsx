@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth.jsx'
 import { useTheme } from '../hooks/useTheme.jsx'
 import { supabase } from '../lib/supabaseClient'
@@ -12,17 +11,8 @@ function initialsForEmail(email) {
 }
 
 function TopBar() {
-  const navigate = useNavigate()
   const { user } = useAuth()
   const { darkMode, setDarkMode } = useTheme()
-  const [query, setQuery] = useState('')
-
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    const trimmed = query.trim()
-    if (!trimmed) return
-    navigate(`/search?q=${encodeURIComponent(trimmed)}`)
-  }
 
   const toggleDarkMode = async () => {
     const next = !darkMode
@@ -37,17 +27,6 @@ function TopBar() {
       <Link to="/dashboard" className="top-bar__logo">
         Macrio
       </Link>
-
-      <form className="top-bar__search glass-card-small" onSubmit={handleSubmit}>
-        <span className="top-bar__search-icon">🔍</span>
-        <input
-          className="top-bar__search-input"
-          type="text"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search foods…"
-        />
-      </form>
 
       <div className="top-bar__actions">
         <button

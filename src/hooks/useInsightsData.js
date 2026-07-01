@@ -4,15 +4,17 @@ import { useAuth } from './useAuth.jsx'
 import { localDateString } from './useDashboardData'
 import { EMPTY_MACROS, sumMacroLogs } from '../lib/macros'
 
+const PERIOD_DAYS = 30
+
 function daysAgoDateString(days) {
   const date = new Date()
   date.setDate(date.getDate() - days)
   return localDateString(date)
 }
 
-function buildDailyCalories(logs, days) {
+function buildDailyCalories(logs) {
   const kcalByDate = new Map()
-  for (let i = days - 1; i >= 0; i--) {
+  for (let i = PERIOD_DAYS - 1; i >= 0; i--) {
     kcalByDate.set(daysAgoDateString(i), 0)
   }
 
@@ -30,7 +32,7 @@ function buildAverageMacros(logs, dailyCalories) {
 
   const totals = sumMacroLogs(logs)
 
-  // Average over days that actually have logs, not the full window —
+  // Average over days that actually have logs, not the full 30-day window —
   // otherwise a new user's average looks artificially low.
   const activeDays = dailyCalories.filter((day) => day.kcal > 0).length || 1
 
@@ -49,7 +51,7 @@ function buildTopFoods(logs) {
     .slice(0, 5)
 }
 
-export function useInsightsData(days = 30) {
+export function useInsightsData() {
   const { user } = useAuth()
   const userId = user?.id
 
@@ -72,7 +74,7 @@ export function useInsightsData(days = 30) {
     setLoading(true)
     setError(null)
 
-    const since = daysAgoDateString(days - 1)
+    const since = daysAgoDateString(PERIOD_DAYS - 1)
 
     Promise.all([
       supabase.from('profiles').select('*').eq('id', userId).single(),
@@ -109,9 +111,9 @@ export function useInsightsData(days = 30) {
     return () => {
       cancelled = true
     }
-  }, [userId, days])
+  }, [userId])
 
-  const dailyCalories = buildDailyCalories(foodLogs, days)
+  const dailyCalories = buildDailyCalories(foodLogs)
 
   return {
     loading,

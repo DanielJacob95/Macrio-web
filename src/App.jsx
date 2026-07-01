@@ -10,8 +10,6 @@ import TermsPage from './pages/legal/TermsPage.jsx'
 import SupportPage from './pages/legal/SupportPage.jsx'
 import DashboardPage from './pages/dashboard/DashboardPage.jsx'
 import DiaryPage from './pages/diary/DiaryPage.jsx'
-import SearchPage from './pages/search/SearchPage.jsx'
-import InsightsPage from './pages/insights/InsightsPage.jsx'
 import ProfilePage from './pages/profile/ProfilePage.jsx'
 
 function RootRedirect() {
@@ -38,8 +36,6 @@ function App() {
           <Route element={<AppShell />}>
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/diary" element={<DiaryPage />} />
-            <Route path="/search" element={<SearchPage />} />
-            <Route path="/insights" element={<InsightsPage />} />
             <Route path="/profile" element={<ProfilePage />} />
           </Route>
         </Route>

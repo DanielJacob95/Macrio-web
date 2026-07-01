@@ -31,30 +31,19 @@ export function DiaryIcon() {
   )
 }
 
-export function SearchIcon() {
-  return (
-    <svg {...common}>
-      <circle cx="11" cy="11" r="7" />
-      <line x1="21" y1="21" x2="16.65" y2="16.65" />
-    </svg>
-  )
-}
-
-export function InsightsIcon() {
-  return (
-    <svg {...common}>
-      <line x1="4" y1="20" x2="20" y2="20" />
-      <rect x="6" y="11" width="3.5" height="7" rx="1" />
-      <rect x="13.25" y="6" width="3.5" height="12" rx="1" />
-    </svg>
-  )
-}
-
 export function ProfileIcon() {
   return (
     <svg {...common}>
       <circle cx="12" cy="8" r="4" />
       <path d="M4 20c1.6-3.6 5-5.5 8-5.5s6.4 1.9 8 5.5" />
+    </svg>
+  )
+}
+
+export function ChevronIcon() {
+  return (
+    <svg {...common} width={16} height={16}>
+      <polyline points="9 6 15 12 9 18" />
     </svg>
   )
 }

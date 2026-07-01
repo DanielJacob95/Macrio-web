@@ -9,6 +9,14 @@ function SupportPage() {
         every message.
       </p>
 
+      <h2>Can I log food from the web app?</h2>
+      <p>
+        Not here — food search and logging only happen in the iOS and Android apps. This web
+        app is a read-only companion for viewing your dashboard, diary, and insights, and for
+        managing profile settings like your goals, units, and dark mode. Anything you log on
+        your phone shows up here automatically.
+      </p>
+
       <h2>How do I delete my data?</h2>
       <p>
         Open Profile → Account → "Delete Account." This permanently removes all of your logged
@@ -17,9 +25,9 @@ function SupportPage() {
         like your account fully removed.
       </p>
 
-      <h2>Why don't search results show every product?</h2>
+      <h2>Why doesn't food search in the app show every product?</h2>
       <p>
-        Food search is powered by{' '}
+        Food search (in the iOS and Android apps) is powered by{' '}
         <a href="https://world.openfoodfacts.org" target="_blank" rel="noreferrer">
           Open Food Facts
         </a>

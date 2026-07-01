@@ -166,6 +166,7 @@
   background: none;
   cursor: pointer;
   text-align: left;
+  text-decoration: none;
   font: inherit;
   color: inherit;
 }

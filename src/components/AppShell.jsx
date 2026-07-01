@@ -1,5 +1,6 @@
-import { NavLink, Outlet } from 'react-router-dom'
-import { DashboardIcon, DiaryIcon, SearchIcon, InsightsIcon, ProfileIcon } from './navIcons.jsx'
+import { useEffect, useState } from 'react'
+import { Link, NavLink, Outlet } from 'react-router-dom'
+import { DashboardIcon, DiaryIcon, ProfileIcon, ChevronIcon } from './navIcons.jsx'
 import TopBar from './TopBar.jsx'
 import Footer from './Footer.jsx'
 import './AppShell.css'
@@ -7,19 +8,42 @@ import './AppShell.css'
 const NAV_ITEMS = [
   { to: '/dashboard', label: 'Dashboard', Icon: DashboardIcon },
   { to: '/diary', label: 'Diary', Icon: DiaryIcon },
-  { to: '/search', label: 'Search', Icon: SearchIcon },
-  { to: '/insights', label: 'Insights', Icon: InsightsIcon },
   { to: '/profile', label: 'Profile', Icon: ProfileIcon },
 ]
 
+const LEGAL_LINKS = [
+  { to: '/privacy', label: 'Privacy Policy' },
+  { to: '/terms', label: 'Terms of Service' },
+  { to: '/support', label: 'Support' },
+]
+
+const SIDEBAR_EXPANDED_KEY = 'macrio_sidebarExpanded'
+
 function AppShell() {
+  const [expanded, setExpanded] = useState(
+    () => localStorage.getItem(SIDEBAR_EXPANDED_KEY) === 'true',
+  )
+
+  useEffect(() => {
+    localStorage.setItem(SIDEBAR_EXPANDED_KEY, String(expanded))
+  }, [expanded])
+
   return (
-    <div className="app-shell">
+    <div className={`app-shell ${expanded ? 'app-shell--sidebar-expanded' : ''}`}>
       <div className="app-shell__background" />
 
       <TopBar />
 
       <nav className="app-shell__nav glass-card">
+        <button
+          type="button"
+          className="app-shell__nav-toggle"
+          onClick={() => setExpanded((e) => !e)}
+          aria-label={expanded ? 'Collapse sidebar' : 'Expand sidebar'}
+        >
+          <ChevronIcon />
+        </button>
+
         {NAV_ITEMS.map(({ to, label, Icon }) => (
           <NavLink
             key={to}
@@ -32,6 +56,26 @@ function AppShell() {
             <span>{label}</span>
           </NavLink>
         ))}
+
+        <div className="app-shell__nav-legal">
+          <div className="app-shell__nav-divider" />
+          {expanded ? (
+            LEGAL_LINKS.map(({ to, label }) => (
+              <Link key={to} to={to} className="app-shell__legal-link">
+                {label}
+              </Link>
+            ))
+          ) : (
+            <button
+              type="button"
+              className="app-shell__legal-toggle"
+              onClick={() => setExpanded(true)}
+              aria-label="Legal and support links"
+            >
+              ℹ️
+            </button>
+          )}
+        </div>
       </nav>
 
       <main className="app-shell__main">
