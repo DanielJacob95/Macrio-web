@@ -1,0 +1,32 @@
+.meal-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.meal-breakdown__labels {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 12px;
+}
+
+.meal-breakdown__label {
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.meal-breakdown__bar {
+  display: flex;
+  gap: 2px;
+  height: 6px;
+}
+
+.meal-breakdown__segment {
+  flex-grow: 0;
+  flex-shrink: 0;
+  height: 100%;
+  border-radius: 999px;
+}

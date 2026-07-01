@@ -25,6 +25,8 @@
 //   fibreGoalG        int4
 //   sugarGoalG        int4
 //   saltGoalG         float8
+//   userType          text, default 'Free User'
+//                       ('Free User' | 'Test Mode' | 'Pro User' | 'Founders Edition')
 //   createdAt         timestamptz, DB default — omit on insert/update
 //
 // food_logs                 (FoodLog.swift)

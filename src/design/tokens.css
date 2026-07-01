@@ -41,6 +41,15 @@
   --cta-gradient: linear-gradient(135deg, #4ade80, #22c55e);
   --cta-glow: #4ade80;
 
+  /* Divider — subtle separators, e.g. chart gridlines */
+  --divider-light: rgba(0, 0, 0, 0.05);
+  --divider-dark: rgba(255, 255, 255, 0.05);
+
+  /* Profile plan badges (Test Mode / Founders Edition accents not covered
+     by the macro or gauge colour sets) */
+  --badge-amber: #f59e0b;
+  --badge-gold: #f5c451;
+
   /* Gauge colour themes (match iOS GaugeColour enum exactly) */
   --gauge-forest-main: #4ade80;
   --gauge-forest-mid: #22c55e;
@@ -67,6 +76,7 @@
   --glass-chip-fill: var(--glass-chip-fill-light);
   --glass-chip-border: var(--glass-chip-border-light);
   --text-colour: var(--text-light);
+  --divider: var(--divider-light);
 }
 
 [data-theme='dark'] {
@@ -76,4 +86,5 @@
   --glass-chip-fill: var(--glass-chip-fill-dark);
   --glass-chip-border: var(--glass-chip-border-dark);
   --text-colour: var(--text-dark);
+  --divider: var(--divider-dark);
 }

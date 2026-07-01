@@ -1,0 +1,94 @@
+.insights {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.insights__title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.insights__card {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.insights__error {
+  margin: 0;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--colour-fat) 15%, transparent);
+  color: var(--colour-fat);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.insights__empty {
+  padding: 24px 8px;
+  text-align: center;
+}
+
+.insights__empty-title {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.insights__empty-subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: color-mix(in srgb, var(--text-colour) 55%, transparent);
+}
+
+.insights__macro-grid {
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.insights__top-foods {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.insights__top-food {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+}
+
+.insights__top-food-name {
+  font-size: 13px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.insights__top-food-count {
+  font-size: 13px;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--text-colour) 55%, transparent);
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+
+.insights__skeleton {
+  animation: insights-pulse 1.4s ease-in-out infinite;
+  background: color-mix(in srgb, var(--text-colour) 10%, transparent);
+}
+
+@keyframes insights-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}

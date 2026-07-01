@@ -43,3 +43,30 @@
   letter-spacing: 1px;
   color: color-mix(in srgb, var(--text-colour) 50%, transparent);
 }
+
+/* Selectable pill — used for meal-type/quantity-type choices. Inactive
+   looks like .glass-card-small; active swaps in the CTA gradient. */
+.pill-button {
+  background: var(--glass-chip-fill);
+  border: 1px solid var(--glass-chip-border);
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-colour);
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.pill-button:active {
+  transform: scale(0.96);
+}
+
+.pill-button--active {
+  background: var(--cta-gradient);
+  border-color: transparent;
+  color: #ffffff;
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--cta-glow) 40%, transparent);
+}
