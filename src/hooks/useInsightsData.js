@@ -2,9 +2,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from './useAuth.jsx'
 import { localDateString } from './useDashboardData'
-
-const PERIOD_DAYS = 30
-const EMPTY_MACROS = { kcal: 0, protein: 0, carbs: 0, fat: 0, fibre: 0, sugar: 0, salt: 0 }
+import { EMPTY_MACROS, sumMacroLogs } from '../lib/macros'
 
 function daysAgoDateString(days) {
   const date = new Date()
@@ -12,9 +10,9 @@ function daysAgoDateString(days) {
   return localDateString(date)
 }
 
-function buildDailyCalories(logs) {
+function buildDailyCalories(logs, days) {
   const kcalByDate = new Map()
-  for (let i = PERIOD_DAYS - 1; i >= 0; i--) {
+  for (let i = days - 1; i >= 0; i--) {
     kcalByDate.set(daysAgoDateString(i), 0)
   }
 
@@ -30,20 +28,9 @@ function buildDailyCalories(logs) {
 function buildAverageMacros(logs, dailyCalories) {
   if (logs.length === 0) return { ...EMPTY_MACROS }
 
-  const totals = logs.reduce(
-    (acc, log) => ({
-      kcal: acc.kcal + (log.kcal ?? 0),
-      protein: acc.protein + (log.proteinG ?? 0),
-      carbs: acc.carbs + (log.carbsG ?? 0),
-      fat: acc.fat + (log.fatG ?? 0),
-      fibre: acc.fibre + (log.fibreG ?? 0),
-      sugar: acc.sugar + (log.sugarG ?? 0),
-      salt: acc.salt + (log.saltG ?? 0),
-    }),
-    { ...EMPTY_MACROS },
-  )
+  const totals = sumMacroLogs(logs)
 
-  // Average over days that actually have logs, not the full 30-day window —
+  // Average over days that actually have logs, not the full window —
   // otherwise a new user's average looks artificially low.
   const activeDays = dailyCalories.filter((day) => day.kcal > 0).length || 1
 
@@ -62,7 +49,7 @@ function buildTopFoods(logs) {
     .slice(0, 5)
 }
 
-export function useInsightsData() {
+export function useInsightsData(days = 30) {
   const { user } = useAuth()
   const userId = user?.id
 
@@ -85,7 +72,7 @@ export function useInsightsData() {
     setLoading(true)
     setError(null)
 
-    const since = daysAgoDateString(PERIOD_DAYS - 1)
+    const since = daysAgoDateString(days - 1)
 
     Promise.all([
       supabase.from('profiles').select('*').eq('id', userId).single(),
@@ -122,9 +109,9 @@ export function useInsightsData() {
     return () => {
       cancelled = true
     }
-  }, [userId])
+  }, [userId, days])
 
-  const dailyCalories = buildDailyCalories(foodLogs)
+  const dailyCalories = buildDailyCalories(foodLogs, days)
 
   return {
     loading,

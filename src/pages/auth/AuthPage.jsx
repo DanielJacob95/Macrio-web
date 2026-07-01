@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth.jsx'
+import Footer from '../../components/Footer.jsx'
 import './AuthPage.css'
 
 function AuthPage() {
@@ -84,6 +85,8 @@ function AuthPage() {
             : 'Already have an account? Log in'}
         </button>
       </div>
+
+      <Footer />
     </div>
   )
 }

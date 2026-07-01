@@ -3,18 +3,9 @@ import { supabase } from '../lib/supabaseClient'
 import { useAuth } from './useAuth.jsx'
 import { sumMacroLogs } from '../lib/macros'
 
-// Mirrors the local-timezone date the iOS/Android apps compute for "today".
-// Deliberately reads getFullYear/getMonth/getDate (local) rather than
-// date.toISOString() (UTC) — toISOString() shifts the date near local
-// midnight, which was the timezone bug already fixed on the native apps.
-export function localDateString(date = new Date()) {
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  return `${year}-${month}-${day}`
-}
+const MEAL_TYPES = ['breakfast', 'lunch', 'dinner', 'snacks']
 
-export function useDashboardData() {
+export function useDiaryData(dateString) {
   const { user } = useAuth()
   const userId = user?.id
 
@@ -35,15 +26,13 @@ export function useDashboardData() {
     setError(null)
 
     try {
-      const today = localDateString()
-
       const [profileResult, logsResult] = await Promise.all([
         supabase.from('profiles').select('*').eq('id', userId).single(),
         supabase
           .from('food_logs')
           .select('*')
           .eq('userId', userId)
-          .eq('loggedDate', today)
+          .eq('loggedDate', dateString)
           .order('createdAt'),
       ])
 
@@ -57,7 +46,7 @@ export function useDashboardData() {
     } finally {
       setLoading(false)
     }
-  }, [userId])
+  }, [userId, dateString])
 
   useEffect(() => {
     fetchData()
@@ -68,5 +57,35 @@ export function useDashboardData() {
     return () => window.removeEventListener('macrio:foodLogged', fetchData)
   }, [fetchData])
 
-  return { profile, logs, loading, error, totals: sumMacroLogs(logs) }
+  const deleteLog = useCallback(
+    async (logId) => {
+      const previous = logs
+      setLogs((current) => current.filter((log) => log.id !== logId))
+
+      const { error: deleteError } = await supabase.from('food_logs').delete().eq('id', logId)
+
+      if (deleteError) {
+        setLogs(previous)
+        setError(deleteError)
+        return
+      }
+
+      window.dispatchEvent(new Event('macrio:foodLogged'))
+    },
+    [logs],
+  )
+
+  const logsByMeal = MEAL_TYPES.reduce((acc, meal) => {
+    acc[meal] = logs.filter((log) => log.mealType === meal)
+    return acc
+  }, {})
+
+  return {
+    profile,
+    logsByMeal,
+    totals: sumMacroLogs(logs),
+    loading,
+    error,
+    deleteLog,
+  }
 }

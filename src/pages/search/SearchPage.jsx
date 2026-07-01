@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { searchFoods } from '../../lib/openFoodFacts'
 import { emoji } from '../../lib/foodEmoji'
 import QuantityModal from '../../components/QuantityModal.jsx'
@@ -12,13 +13,23 @@ const MEAL_TYPES = [
 ]
 
 function SearchPage() {
-  const [query, setQuery] = useState('')
+  const [searchParams] = useSearchParams()
+  const [query, setQuery] = useState(() => searchParams.get('q') ?? '')
   const [results, setResults] = useState([])
   const [loading, setLoading] = useState(false)
   const [searched, setSearched] = useState(false)
   const [mealType, setMealType] = useState('breakfast')
   const [selectedFood, setSelectedFood] = useState(null)
   const [toast, setToast] = useState(null)
+
+  // Picks up a new ?q= when the TopBar's search navigates here while this
+  // page is already mounted (the URL changes, but component state doesn't
+  // update on its own since it isn't derived from the URL every render).
+  useEffect(() => {
+    const q = searchParams.get('q')
+    if (q && q !== query) setQuery(q)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams])
 
   // Debounced search: every keystroke clears the previous timer via the
   // effect's cleanup, so only the last keystroke in a 400ms window fires.

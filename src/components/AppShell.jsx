@@ -1,9 +1,12 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { DashboardIcon, SearchIcon, InsightsIcon, ProfileIcon } from './navIcons.jsx'
+import { DashboardIcon, DiaryIcon, SearchIcon, InsightsIcon, ProfileIcon } from './navIcons.jsx'
+import TopBar from './TopBar.jsx'
+import Footer from './Footer.jsx'
 import './AppShell.css'
 
 const NAV_ITEMS = [
   { to: '/dashboard', label: 'Dashboard', Icon: DashboardIcon },
+  { to: '/diary', label: 'Diary', Icon: DiaryIcon },
   { to: '/search', label: 'Search', Icon: SearchIcon },
   { to: '/insights', label: 'Insights', Icon: InsightsIcon },
   { to: '/profile', label: 'Profile', Icon: ProfileIcon },
@@ -13,6 +16,8 @@ function AppShell() {
   return (
     <div className="app-shell">
       <div className="app-shell__background" />
+
+      <TopBar />
 
       <nav className="app-shell__nav glass-card">
         {NAV_ITEMS.map(({ to, label, Icon }) => (
@@ -30,7 +35,10 @@ function AppShell() {
       </nav>
 
       <main className="app-shell__main">
-        <Outlet />
+        <div className="app-shell__content">
+          <Outlet />
+        </div>
+        <Footer />
       </main>
     </div>
   )

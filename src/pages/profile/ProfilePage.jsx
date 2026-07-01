@@ -221,7 +221,9 @@ function ProfilePage() {
   return (
     <div className="profile">
       <div className="glass-card profile__avatar-card">
-        <div className="profile__avatar">{initialsFor(profile.name, user?.email)}</div>
+        <div className="avatar-circle avatar-circle--lg profile__avatar">
+          {initialsFor(profile.name, user?.email)}
+        </div>
         <h1 className="profile__name">{profile.name || 'Macrio user'}</h1>
         {user?.email && <p className="profile__email">{user.email}</p>}
         <UserTypeBadge userType={profile.userType} />

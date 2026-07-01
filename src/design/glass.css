@@ -70,3 +70,74 @@
   color: #ffffff;
   box-shadow: 0 6px 16px color-mix(in srgb, var(--cta-glow) 40%, transparent);
 }
+
+/* Initials avatar — used on ProfilePage (--lg) and the TopBar (default). */
+.avatar-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--cta-gradient);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+  text-decoration: none;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--cta-glow) 40%, transparent);
+}
+
+.avatar-circle--lg {
+  width: 72px;
+  height: 72px;
+  font-size: 24px;
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--cta-glow) 45%, transparent);
+}
+
+/* Capsule dark-mode toggle — used on ProfilePage (default) and the TopBar
+   (--compact). */
+.dark-toggle {
+  width: 52px;
+  height: 30px;
+  border-radius: 999px;
+  border: none;
+  padding: 3px;
+  background: color-mix(in srgb, var(--text-colour) 15%, transparent);
+  cursor: pointer;
+  transition: background 0.25s ease;
+  flex-shrink: 0;
+}
+
+.dark-toggle--on {
+  background: var(--cta-gradient);
+}
+
+.dark-toggle__thumb {
+  display: block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.dark-toggle--on .dark-toggle__thumb {
+  transform: translateX(22px);
+}
+
+.dark-toggle--compact {
+  width: 40px;
+  height: 24px;
+  padding: 3px;
+}
+
+.dark-toggle--compact .dark-toggle__thumb {
+  width: 18px;
+  height: 18px;
+}
+
+.dark-toggle--compact.dark-toggle--on .dark-toggle__thumb {
+  transform: translateX(16px);
+}
