@@ -6,7 +6,7 @@ import './AuthPage.css'
 function AuthPage() {
   const location = useLocation()
   const navigate = useNavigate()
-  const { signIn, signUp } = useAuth()
+  const { user, signIn, signUp } = useAuth()
 
   const [mode, setMode] = useState(location.pathname === '/signup' ? 'signup' : 'login')
   const [email, setEmail] = useState('')
@@ -17,6 +17,10 @@ function AuthPage() {
   useEffect(() => {
     setMode(location.pathname === '/signup' ? 'signup' : 'login')
   }, [location.pathname])
+
+  useEffect(() => {
+    if (user) navigate('/dashboard', { replace: true })
+  }, [user, navigate])
 
   const toggleMode = () => {
     navigate(mode === 'login' ? '/signup' : '/login')
@@ -31,7 +35,11 @@ function AuthPage() {
     const { error: authError } = await action(email, password)
 
     setSubmitting(false)
-    if (authError) setError(authError.message)
+    if (authError) {
+      setError(authError.message)
+    } else {
+      navigate('/dashboard', { replace: true })
+    }
   }
 
   return (
